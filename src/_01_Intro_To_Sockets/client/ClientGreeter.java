@@ -8,7 +8,7 @@ public class ClientGreeter {
    public static void main(String [] args) {
 	  //1. Create a String for the ip address of the server. 
 	  // If you don't know how to find a computer's ip address, ask about ifconfig on linux/mac and ipconfig on windows.
-      String ip = "108.64.213.26";
+      String ip = ClientGreeter.getIPAddress();
       //2. Create an integer for the server's port number
       int port = 8008;
       //3. Surround steps 4-9 in a try-catch block that catches any IOExceptions.
@@ -17,11 +17,11 @@ public class ClientGreeter {
     	 Socket s = new Socket(ip, port);
          //5. Create a DataOutputStream object. When initializing it, use the Socket object you created in step 4 to call the getOutputStream() method.
          DataOutputStream dos;
-         dos = (DataOutputStream) s.getOutputStream();
+         dos = new DataOutputStream(s.getOutputStream());
          //6. Use the DataOutputStream object to send a message to the server using the writeUTF(String message) method
          dos.writeUTF("hello!");
          //7. Create a DataInputStream object. When initializing it, use the Server object you created in step 4 to call the getInputStream() method.
-         DataInputStream dis = (DataInputStream) s.getInputStream();
+         DataInputStream dis = new DataInputStream(s.getInputStream());
          //8. Use the DataInputStream object to print a message from the server using the readUTF() method.
          System.out.println(dis.readUTF() + " It's server!");
          //9. Close the client's server object
@@ -31,4 +31,13 @@ public class ClientGreeter {
       }
 
    }
+   
+   public static String getIPAddress() {
+       try {
+           return InetAddress.getLocalHost().getHostAddress();
+       } catch (UnknownHostException e) {
+           return "ERROR: unable to get IP adress!";
+       }
+   }
+
 }
